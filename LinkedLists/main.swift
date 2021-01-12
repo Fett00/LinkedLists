@@ -38,6 +38,25 @@ struct LinkedList {
         }
     }
     
+    mutating func delete(indexOf:Int){
+        assert(indexOf < _capacity, "Out of range.")
+        var tempElement:Element? = head
+        
+        
+        if indexOf == 0 {
+            head = head?.nextElement
+        }
+        else{
+            if indexOf > 1 {
+                for _ in 1...indexOf-1 {
+                    tempElement = tempElement?.nextElement
+                }
+            }
+            tempElement?.nextElement = tempElement?.nextElement?.nextElement
+        }
+        _capacity -= 1
+    }
+    
     subscript(key:Int) -> Any{
         
         set{
@@ -71,10 +90,10 @@ struct LinkedList {
             for _ in 0..<key{
                 tempElement = tempElement.nextElement!
             }
-            
             return tempElement.value
         }
         
     }
     
 }
+

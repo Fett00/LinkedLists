@@ -12,14 +12,12 @@ class Element{
 
 struct LinkedList {
     
-    
     private var _capacity: Int = 0
     private var head:Element? = nil
     
     var capacity: Int{
         return _capacity
     }
-    
     
     mutating func append(value:Any) {
         if _capacity == 0{
@@ -28,7 +26,7 @@ struct LinkedList {
         }
         else{
             var lastElement:Element? = head
-
+            
             while lastElement?.nextElement != nil {
                 lastElement = lastElement?.nextElement
             }
@@ -44,13 +42,15 @@ struct LinkedList {
         
         
         if indexOf == 0 {
-            head = head?.nextElement
+            head = tempElement?.nextElement
+        }
+        else if indexOf == 1{
+            tempElement?.nextElement = tempElement?.nextElement?.nextElement
         }
         else{
-            if indexOf > 1 {
-                for _ in 1...indexOf-1 {
-                    tempElement = tempElement?.nextElement
-                }
+            for _ in 0..<indexOf-1{
+                tempElement = tempElement?.nextElement
+                
             }
             tempElement?.nextElement = tempElement?.nextElement?.nextElement
         }
@@ -61,39 +61,32 @@ struct LinkedList {
         
         set{
             assert(key < _capacity, "Out of range.")
-            if _capacity == 0{
-                head = Element(value: newValue, link: nil)
-                _capacity += 1
+            
+            var tempElement:Element? = head
+            
+            if key == 0{
+                tempElement = Element(value: newValue, link: tempElement?.nextElement)
             }
-            else if key == _capacity-1{
-                var previousElement:Element? = head
-                
-                for _ in 0...key-1{
-                    previousElement = previousElement?.nextElement
-                }
-                previousElement?.nextElement = Element(value: newValue, link: nil)
+            else if key == 1{
+                tempElement?.nextElement = Element(value: newValue, link: tempElement?.nextElement?.nextElement)
             }
             else{
-                var previousElement:Element? = head
-                
-                for _ in 0...key-1{
-                    previousElement = previousElement?.nextElement
+                for _ in 0..<key-1{
+                    tempElement = tempElement?.nextElement
                 }
-                previousElement?.nextElement = Element(value: newValue, link: previousElement?.nextElement?.nextElement)
             }
+            
+            tempElement?.nextElement = Element(value: newValue, link: tempElement?.nextElement?.nextElement)
         }
         get{
             assert(key < capacity, "Out of range.")
             
-            var tempElement:Element = head!
+            var tempElement:Element? = head
             
             for _ in 0..<key{
-                tempElement = tempElement.nextElement!
+                tempElement = tempElement?.nextElement
             }
-            return tempElement.value
+            return tempElement?.value ?? -1
         }
-        
     }
-    
 }
-

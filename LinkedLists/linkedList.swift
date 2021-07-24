@@ -1,5 +1,5 @@
 
-class Element<Value>{
+fileprivate class Element<Value>{
     
     var value: Value
     var nextElement:Element?
@@ -9,31 +9,32 @@ class Element<Value>{
     }
 }
 
-struct LinkedList {
+/// Collection of linked values
+struct LinkedList<Type> {
     
     private var _capacity: Int = 0
-    private var head:Element<Any>?
+    private var head:Element<Type>?
     
     var capacity: Int{
         return _capacity
     }
     
-    mutating func append(value:Any) {
+    mutating func append(value:Type) {
         
         if head == nil{
             head = Element(value: value)
             _capacity += 1
         }
         else{
-            var nextStepElement:Element? = head
+            var currentElement:Element? = head
             
             while true {
-                if nextStepElement?.nextElement == nil{
+                if currentElement?.nextElement == nil{
                     break
                 }
-                nextStepElement = nextStepElement?.nextElement
+                currentElement = currentElement?.nextElement
             }
-            nextStepElement?.nextElement = Element(value: value)
+            currentElement?.nextElement = Element(value: value)
             _capacity += 1
         }
     }
@@ -49,52 +50,34 @@ struct LinkedList {
             _capacity -= 1
         }
         else{
-            var nextStepElement:Element? = head
+            var currentElement:Element? = head
             for _ in 1..<indexOf{
-                nextStepElement = nextStepElement?.nextElement
+                currentElement = currentElement?.nextElement
             }
-            nextStepElement?.nextElement = nextStepElement?.nextElement?.nextElement
+            currentElement?.nextElement = currentElement?.nextElement?.nextElement
             
             _capacity -= 1
         }
     }
     
-    subscript(key:Int) -> Any{
+    subscript(key:Int) -> Type?{
         
-        set{
-            
-            if key > _capacity{
-                fatalError("Index out of range.")
-            }
-            
-            if key == 0{
-                head?.value = newValue
-            }
-            else{
-                var nextStepElement:Element? = head
-                
-                for _ in 1...key{
-                    nextStepElement = nextStepElement?.nextElement
-                }
-                nextStepElement?.value = newValue
-            }
-        }
         get{
             
             if key > _capacity{
-                fatalError("Index out of range.")
+                return nil
             }
             
             if key == 0{
-                return head?.value ?? -1
+                return head?.value
             }
             else{
-                var nextStepElement:Element? = head
+                var currentElement:Element? = head
                 
                 for _ in 1...key{
-                    nextStepElement = nextStepElement?.nextElement
+                    currentElement = currentElement?.nextElement
                 }
-                return nextStepElement?.value ?? -1
+                return currentElement?.value
             }
         }
     }
